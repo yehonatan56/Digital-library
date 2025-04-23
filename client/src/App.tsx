@@ -1,5 +1,6 @@
-function App() {
-    return <div>hello world</div>;
-}
+import Pages from './pages/pages.tsx';
 
+function App() {
+    return <Pages />;
+}
 export default App;
