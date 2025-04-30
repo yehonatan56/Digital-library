@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './tasksServer.css';
 
 // TS interface,function, etc. for the logic
+const API_URL = 'http://localhost:3000/api'; // Replace with your API URL
 type ApiRequest = {
     name: string;
     description: string;
@@ -33,13 +34,14 @@ const request = async (apiRequest: ApiRequest) => {
         ...defaultApiOptionalsValues,
         ...apiRequest,
     } as ApiRequest;
+    console.log('Request Data:', requestData);.
     if (requestData.params) {
         const params = new URLSearchParams(requestData.params).toString();
         requestData.url = `${requestData.url}?${params}`;
     }
     if (!requestData.status) return { status: 500, data: 'Request not created' } as unknown as ApiResponse<null>;
 
-    return await fetch(requestData.url, {
+    await fetch(API_URL + requestData.url, {
         method: requestData.method,
         headers: requestData.headers,
         body: JSON.stringify(requestData.body),
@@ -70,7 +72,7 @@ const apis: ApiRequest[] = [
         name: 'login',
         description: 'Login to the application organization or user',
         url: '/login',
-        status: false,
+        status: true,
         params: null,
         method: 'POST',
         body: {
@@ -97,12 +99,12 @@ const apis: ApiRequest[] = [
     },
 ];
 
-export const apiCall = async (apiName: string, apiRequest: ApiRequest) => {
+export const apiCall = async (apiName: string, body:object, params?:Record<string, string> | null = null) => {
     const api = apis.find((api) => api.name === apiName);
     if (!api) {
         throw new Error(`API ${apiName} not found`);
     }
-    return await request(apiRequest);
+    return await request({ ...api, body , params });
 };
 
 export function TasksServer() {
