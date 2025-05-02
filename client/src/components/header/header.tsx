@@ -1,6 +1,6 @@
 import React from 'react';
 import NavbarComp from '../navbar/navbar.tsx';
-import { apiCall, TasksServer } from '../../tasksServer.tsx';
+import { TasksServer } from '../../tasksServer.tsx';
 
 function Header({ children }: { children: React.ReactNode }) {
     return (

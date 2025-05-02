@@ -34,7 +34,7 @@ const request = async (apiRequest: ApiRequest) => {
         ...defaultApiOptionalsValues,
         ...apiRequest,
     } as ApiRequest;
-    console.log('Request Data:', requestData);.
+    console.log('Request Data:', requestData);
     if (requestData.params) {
         const params = new URLSearchParams(requestData.params).toString();
         requestData.url = `${requestData.url}?${params}`;
@@ -67,7 +67,7 @@ const request = async (apiRequest: ApiRequest) => {
         });
 };
 
-const apis: ApiRequest[] = [
+const apis = [
     {
         name: 'login',
         description: 'Login to the application organization or user',
@@ -97,16 +97,47 @@ const apis: ApiRequest[] = [
             },
         },
     },
-];
 
-export const apiCall = async (apiName: string, body:object, params?:Record<string, string> | null = null) => {
+    {
+        name: 'register',
+        description: 'Register a new user',
+        url: '/register',
+        status: true,
+        params: null,
+        method: 'POST',
+        body: {
+            username: 'string',
+            password: 'string',
+            email: 'string',
+        },
+        goodResponse: {
+            status: 201,
+            data: {
+                message: 'User created successfully',
+                user: {
+                    id: 'string',
+                    username: 'string',
+                    email: 'string',
+                },
+            },
+        },
+        errorResponse: {
+            status: 400,
+            data: {
+                message: 'User already exists',
+            },
+        },
+    },
+] satisfies readonly ApiRequest[];
+type apiNames = (typeof apis)[number]['name'];
+export const apiCall = async (apiName: apiNames, body: object, params?: Record<string, string> | null = null) => {
     const api = apis.find((api) => api.name === apiName);
     if (!api) {
         throw new Error(`API ${apiName} not found`);
     }
-    return await request({ ...api, body , params });
+    return await request({ ...api, body, params });
 };
-
+apiCall('l', { username: 'test', password: 'test' }, { test: 'test' });
 export function TasksServer() {
     const [showTasks, setShowTasks] = useState(false);
     const [moreInfo, setMoreInfo] = useState(false);
