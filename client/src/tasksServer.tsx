@@ -168,11 +168,7 @@ const apis = [
 ] as const satisfies ReadonlyArray<ApiRequest>;
 
 type apiNames = (typeof apis)[number]['name'];
-export const apiCall = async (
-    apiName: apiNames,
-    body: object | null,
-    params?: Record<string, string> | null = null
-) => {
+export const apiCall = async (apiName: apiNames, body: object | null, params: Record<string, string> | null = null) => {
     const api = apis.find((api) => api.name === apiName);
     if (!api) {
         throw new Error(`API ${apiName} not found`);
