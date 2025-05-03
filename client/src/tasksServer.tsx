@@ -58,17 +58,21 @@ const request = async (apiRequest: ApiRequest) => {
         requestData.url = `${requestData.url}?${params}`;
     }
     if (!requestData.status) return { status: 500, data: 'Request not created' } as unknown as ApiResponse<null>;
-
+    let res: Response;
     return await fetch(API_URL + requestData.url, {
         method: requestData.method,
         headers: requestData.headers,
         mode: 'no-cors',
         body: requestData.body ? JSON.stringify(requestData.body) : null,
     })
-        .then((response) => parseResponse(response, requestData.responseType || 'json'))
+        .then((response) => {
+            res = response;
+            return parseResponse(response, requestData.responseType || 'json');
+        })
         .then((data) => {
+            console.log(res);
             return {
-                status: 200,
+                status: res.status,
                 data,
             } as ApiResponse<typeof data>;
         })
@@ -86,7 +90,7 @@ const apis = [
         name: 'login',
         description: 'Login to the application organization or user',
         url: '/login',
-        status: true,
+        status: false,
         params: null,
         method: 'POST',
         body: {
