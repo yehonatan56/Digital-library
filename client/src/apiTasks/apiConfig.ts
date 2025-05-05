@@ -28,6 +28,8 @@ export const apis = [
                 message: 'Invalid username or password',
             },
         },
+        errorResponseStatus: 401,
+        goodResponseStatus: 200,
     },
     {
         name: 'login organization',
@@ -56,5 +58,7 @@ export const apis = [
                 message: 'Invalid username or password',
             },
         },
+        errorResponseStatus: 401,
+        goodResponseStatus: 200,
     },
 ] as const satisfies ReadonlyArray<ApiRequest>;
