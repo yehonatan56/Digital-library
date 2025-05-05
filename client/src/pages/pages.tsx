@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Header from '../components/header/header.tsx';
+import Header from '../components/header/header';
+import Login from '../components/login/login';
 
 const router = createBrowserRouter([
     {
@@ -37,10 +38,6 @@ function Pages() {
 }
 
 export default Pages;
-
-function Login() {
-    return <div>Login</div>;
-}
 
 function Register() {
     return <div>Register</div>;

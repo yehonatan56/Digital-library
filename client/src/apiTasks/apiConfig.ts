@@ -2,9 +2,9 @@ import { ApiRequest } from './apiTypes.ts';
 
 export const apis = [
     {
-        name: 'login',
+        name: 'login user',
         description: 'Login to the application organization or user',
-        url: '/login',
+        url: '/auth/login',
         status: false,
         params: null,
         method: 'POST',
@@ -19,7 +19,6 @@ export const apis = [
                 user: {
                     id: 'string',
                     username: 'string',
-                    email: 'string',
                 },
             },
         },
@@ -31,32 +30,30 @@ export const apis = [
         },
     },
     {
-        name: 'register',
-        description: 'Register a new user',
-        url: '/register',
-        status: true,
+        name: 'login organization',
+        description: 'Login to the application organization or user',
+        url: '/organization/login',
+        status: false,
         params: null,
         method: 'POST',
         body: {
             username: 'string',
             password: 'string',
-            email: 'string',
         },
         goodResponse: {
-            status: 201,
+            status: 200,
             data: {
-                message: 'User created successfully',
-                user: {
+                token: 'string',
+                organization: {
                     id: 'string',
-                    username: 'string',
-                    email: 'string',
+                    name: 'string',
                 },
             },
         },
         errorResponse: {
-            status: 400,
+            status: 401,
             data: {
-                message: 'User already exists',
+                message: 'Invalid username or password',
             },
         },
     },

@@ -1,8 +1,25 @@
-import { ApiRequest, ApiResponse } from './apiTypes.ts';
+import { ApiRequest } from './apiTypes';
+import { apis } from './apiConfig';
 
 const API_URL = 'http://localhost:3000'; // Replace with your API URL
 
-export function parseResponse(response: Response, type = 'json') {
+type ApiNames = (typeof apis)[number]['name'];
+
+export const apiCall = async (
+    name: ApiNames,
+    params: Record<string, any> | null,
+    body: Record<string, any> | null,
+    headers: Record<string, any> | null
+) => {
+    const api = apis.find((api) => api.name === name);
+    if (!api) {
+        console.log(`API ${name} not found`);
+        throw new Error(`API ${name} not found`);
+    }
+    return await request(api, params, body, headers);
+};
+
+export function parseResponse(response: Response, type: string = 'json') {
     switch (type) {
         case 'json':
             return response.json();
@@ -27,47 +44,42 @@ const defaultApiOptionalsValues = {
     body: {},
 };
 
-export const request = async (apiRequest: ApiRequest): Promise<ApiResponse<any>> => {
-    const requestData = {
-        ...defaultApiOptionalsValues,
+export const request = async (
+    apiRequest: ApiRequest,
+    params: Record<string, any> | null,
+    body: Record<string, any> | null,
+    headers: Record<string, any> | null
+) => {
+    const requestData: ApiRequest = {
         ...apiRequest,
-    } as ApiRequest;
-
-    console.log('Request Data:', requestData);
-
-    if (requestData.params) {
-        const params = new URLSearchParams(requestData.params).toString();
-        requestData.url = `${requestData.url}?${params}`;
-    }
+        params: params ?? defaultApiOptionalsValues.params,
+        headers: headers ?? defaultApiOptionalsValues.headers,
+        body: body ?? defaultApiOptionalsValues.body,
+    };
+    console.log(requestData.body);
 
     if (!requestData.status) {
-        return { status: 500, data: 'Request not created' } as unknown as ApiResponse<null>;
+        console.log(`API ${requestData.name} is disabled`);
+        throw new Error(`API ${requestData.name} is disabled`);
     }
 
-    let res: Response;
+    let url = `${API_URL}${requestData.url}`;
 
-    return await fetch(API_URL + requestData.url, {
+    if (requestData.params && Object.keys(requestData.params).length > 0) {
+        const paramsString = new URLSearchParams(requestData.params).toString();
+        url += `?${paramsString}`;
+    }
+
+    const options: RequestInit = {
         method: requestData.method,
         headers: requestData.headers,
-        mode: 'no-cors',
-        body: requestData.body ? JSON.stringify(requestData.body) : null,
-    })
-        .then((response) => {
-            res = response;
-            return parseResponse(response, requestData.responseType || 'json');
-        })
-        .then((data) => {
-            console.log(res);
-            return {
-                status: res.status,
-                data,
-            } as ApiResponse<typeof data>;
-        })
+        body: requestData.body && requestData.method !== 'GET' ? JSON.stringify(requestData.body) : null,
+    };
+
+    return fetch(url, options)
+        .then((response) => parseResponse(response, requestData.responseType || 'json'))
         .catch((error) => {
-            console.error('There has been a problem with your fetch operation:', error);
-            return {
-                status: 500,
-                data: error,
-            } as ApiResponse<typeof error>;
+            console.error('API call failed:', error);
+            throw error;
         });
 };
