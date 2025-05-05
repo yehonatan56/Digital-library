@@ -61,8 +61,7 @@ export const request = async (
     console.log(requestData.body);
 
     if (!requestData.status) {
-        console.log(`API ${requestData.name} is disabled`);
-        throw new Error(`API ${requestData.name} is disabled`);
+        console.error(`API ${requestData.name} is disabled`);
     }
 
     let url = `${API_URL}${requestData.url}`;

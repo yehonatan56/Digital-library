@@ -4,14 +4,34 @@
     height: 600px;
     top: 20%;
     left: 30%;
+    z-index: 1000;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    text-align: center;
     background-color: #f0f0f0;
 }
-
+#tasks-container h1 {
+    width: 100%;
+}
 .task {
     background-color: #fff;
     border: 1px solid #ccc;
     padding: 10px;
-    margin: 5px;
     border-radius: 5px;
     width: 250px;
+    height: 250px;
+}
+
+.more-info {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    width: 400px;
+    min-height: 400px;
 }
