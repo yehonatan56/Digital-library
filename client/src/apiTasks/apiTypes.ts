@@ -10,6 +10,8 @@ export type ApiRequest = {
     body?: Record<string, any> | null;
     goodResponse: Record<string, any>;
     errorResponse: Record<string, any>;
+    goodResponseStatus: number;
+    errorResponseStatus: number;
 };
 
 export type ApiResponse<T> = {

@@ -19,7 +19,9 @@ export const apiCall = async (
     return await request(api, params, body, headers);
 };
 
+let res: Response;
 export function parseResponse(response: Response, type: string = 'json') {
+    res = response;
     switch (type) {
         case 'json':
             return response.json();
@@ -78,6 +80,14 @@ export const request = async (
 
     return fetch(url, options)
         .then((response) => parseResponse(response, requestData.responseType || 'json'))
+        .then((data) => {
+            // @ts-ignore
+            if (requestData.errorResponseStatus && res.status === requestData.errorResponseStatus) {
+                console.error('Error response:', data);
+                throw new Error(`Error: ${data.status}`);
+            }
+            return data;
+        })
         .catch((error) => {
             console.error('API call failed:', error);
             throw error;
