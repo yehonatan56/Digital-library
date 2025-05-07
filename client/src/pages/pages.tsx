@@ -1,8 +1,8 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Header from '../components/header/header';
 import Login from '../components/login/login';
-import RegisterUser from '../components/register/registerUser.tsx';
 import RegisterOrganization from '../components/register/registerOrganization.tsx';
+import Register from '../components/register/register.tsx';
 
 const router = createBrowserRouter([
     {
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
         path: '/register-user',
         element: (
             <Header>
-                <RegisterUser onlyUser />
+                <Register />
             </Header>
         ),
     },

@@ -1,33 +1,45 @@
+import React, { forwardRef, useState, useImperativeHandle } from 'react';
 import { handleRegisterUser } from '../../logic/auth.logic.ts';
 import './register.css';
-import useRegister from './useRegister.tsx';
 
-export default function RegisterUser({ onlyUser }: { onlyUser?: boolean }) {
-    const {
-        name,
-        setName,
-        username,
-        setUsername,
-        password,
-        setPassword,
-        confirmPassword,
-        setConfirmPassword,
-        phone,
-        setPhone,
-        error,
-        setError,
-    } = useRegister();
+type RegisterUserProps = {
+    onlyUser?: boolean;
+};
+
+const RegisterUser = forwardRef(function RegisterUser(
+    { onlyUser }: RegisterUserProps,
+    ref: React.Ref<{ triggerSubmit: () => void }>
+) {
+    const [name, setName] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [phone, setPhone] = useState('');
+    const [error, setError] = useState<string | null>(null);
+
+    // expose triggerSubmit function to parent
+    useImperativeHandle(ref, () => ({
+        triggerSubmit: () => {
+            handleSubmit(new Event('submit') as any); // simulate submit event
+        },
+    }));
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setError(null);
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+        // Call the handleRegisterUser function with the form data
+        // and setError to handle any errors
+        onlyUser && handleRegisterUser(e, { name, username, password, confirmPassword, phone }, setError);
+    };
+
     return (
-        <div className={onlyUser ? 'register-form-container' : 'register-user-for-create-organization'}>
-            <h1>Register user</h1>
-            <form
-                onSubmit={(e) =>
-                    onlyUser
-                        ? handleRegisterUser(e, { name, username, password, confirmPassword, phone }, setError)
-                        : null
-                }
-                className="mt-4"
-            >
+        <div className="register-form-container">
+            <h1>Register User</h1>
+            <form onSubmit={handleSubmit} className="mt-4">
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">
                         Name
@@ -94,12 +106,13 @@ export default function RegisterUser({ onlyUser }: { onlyUser?: boolean }) {
                     />
                 </div>
                 {error && <div className="alert alert-danger">{error}</div>}
-                {onlyUser && (
-                    <button type="submit" className="btn btn-primary">
-                        Register
-                    </button>
-                )}
+                <button type="submit" className="btn btn-primary">
+                    Register
+                </button>
             </form>
         </div>
     );
-}
+});
+
+export default RegisterUser;
+//
