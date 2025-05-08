@@ -64,6 +64,7 @@ const RegisterUser = forwardRef(function RegisterUser(
                         id="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
+                        onFocus={() => setError(null)}
                         required
                     />
                 </div>
@@ -77,6 +78,7 @@ const RegisterUser = forwardRef(function RegisterUser(
                         id="username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
+                        onFocus={() => setError(null)}
                         required
                     />
                 </div>
@@ -90,6 +92,7 @@ const RegisterUser = forwardRef(function RegisterUser(
                         id="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        onFocus={() => setError(null)}
                         required
                     />
                 </div>
@@ -103,6 +106,7 @@ const RegisterUser = forwardRef(function RegisterUser(
                         id="confirmPassword"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
+                        onFocus={() => setError(null)}
                         required
                     />
                 </div>
@@ -116,12 +120,13 @@ const RegisterUser = forwardRef(function RegisterUser(
                         id="phone"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
+                        onFocus={() => setError(null)}
                         required
                     />
                 </div>
                 {error && <div className="alert alert-danger">{error}</div>}
                 {onlyUser && (
-                    <button type="submit" className="btn btn-primary">
+                    <button type="submit" className="btn btn-primary w-100">
                         Register
                     </button>
                 )}
