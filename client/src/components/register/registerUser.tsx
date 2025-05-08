@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useImperativeHandle } from 'react';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { handleRegisterUser } from '../../logic/auth.logic.ts';
 import './register.css';
 
@@ -10,36 +10,50 @@ const RegisterUser = forwardRef(function RegisterUser(
     { onlyUser }: RegisterUserProps,
     ref: React.Ref<{ triggerSubmit: () => void }>
 ) {
-    const [name, setName] = useState('');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [phone, setPhone] = useState('');
+    const [name, setName] = useState('john doe');
+    const [username, setUsername] = useState('johndoe');
+    const [password, setPassword] = useState('123456');
+    const [confirmPassword, setConfirmPassword] = useState('123456');
+    const [phone, setPhone] = useState('052123456');
     const [error, setError] = useState<string | null>(null);
 
     // expose triggerSubmit function to parent
     useImperativeHandle(ref, () => ({
         triggerSubmit: () => {
-            handleSubmit(new Event('submit') as any); // simulate submit event
+            return handleSubmit(new Event('submit') as any); // simulate submit event
         },
     }));
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
+        if (!name || !username || !password || !confirmPassword || !phone) {
+            setError('All fields are required');
+            return false;
+        }
+        if (username.length < 3) {
+            setError('Username must be at least 3 characters long');
+            return false;
+        }
+
+        if (password.length < 6) {
+            setError('Password must be at least 6 characters long');
+            return false;
+        }
+
         if (password !== confirmPassword) {
             setError('Passwords do not match');
-            return;
+            return false;
         }
         // Call the handleRegisterUser function with the form data
         // and setError to handle any errors
-        onlyUser && handleRegisterUser(e, { name, username, password, confirmPassword, phone }, setError);
+        return onlyUser ? handleRegisterUser(e, { name, username, password, confirmPassword, phone }, setError) : true;
     };
 
     return (
         <div className="register-form-container">
             <h1>Register User</h1>
-            <form onSubmit={handleSubmit} className="mt-4">
+            <form onSubmit={onlyUser ? handleSubmit : (e) => e.preventDefault()} className="mt-4">
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">
                         Name
@@ -106,9 +120,11 @@ const RegisterUser = forwardRef(function RegisterUser(
                     />
                 </div>
                 {error && <div className="alert alert-danger">{error}</div>}
-                <button type="submit" className="btn btn-primary">
-                    Register
-                </button>
+                {onlyUser && (
+                    <button type="submit" className="btn btn-primary">
+                        Register
+                    </button>
+                )}
             </form>
         </div>
     );

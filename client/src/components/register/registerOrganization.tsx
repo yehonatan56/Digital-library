@@ -9,7 +9,9 @@ export default function RegisterOrganization() {
     const step1Validator = () => {
         if (step1Ref.current) {
             // @ts-ignore
-            step1Ref.current.triggerSubmit();
+            const result = step1Ref.current.triggerSubmit();
+            console.log('result', result);
+            return result;
         }
     };
     const step2Content = () => <h1>Step 2 Content</h1>;
