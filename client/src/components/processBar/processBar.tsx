@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './processBar.css';
 
 interface ProcessBarProps {
@@ -15,10 +15,13 @@ export default function ProcessBar({ config }: ProcessBarProps) {
             <div className="steps">
                 <div className="steps-line">
                     {config.map((item, index) => (
-                        <div key={index} className={`step ${index <= step ? 'active' : ''}`}>
-                            <div className={`circle ${index <= step ? 'active' : ''}`}>{index + 1}</div>
-                            <h2 className="label">{item.label}</h2>
-                        </div>
+                        <React.Fragment key={index}>
+                            <div className={`step ${index <= step ? 'active' : ''} step-circle-container`}>
+                                <div className={`circle ${index <= step ? 'active' : ''}`}>{index + 1}</div>
+                                <h2 className="label">{item.label}</h2>
+                            </div>
+                            {index < config.length - 1 && <div className="line" />}
+                        </React.Fragment>
                     ))}
                 </div>
                 {config.map(
