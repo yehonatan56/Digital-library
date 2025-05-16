@@ -11,13 +11,25 @@ const InsertLogo = forwardRef(function (_props, ref) {
             return handleSubmit(new Event('submit') as any); // simulate submit event
         },
     }));
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!fileState) {
+            // todo: check how to create a custom error popup
+            console.error('No file selected');
+            return false;
+        }
+        return fileState;
+    };
     return (
         <div>
             <h1>Insert Logo</h1>
+
             <input
                 className="form-control"
                 type="file"
                 id="formFile"
+                /* @ts-expect-error: The ref type does not match the expected type for this input element */
                 ref={logo}
                 onChange={(e) => setFileState(e.currentTarget.files ? e.currentTarget.files[0] : null)}
             />

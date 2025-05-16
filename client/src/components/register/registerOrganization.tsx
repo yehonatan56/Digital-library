@@ -10,7 +10,7 @@ export default function RegisterOrganization() {
 
     const step1Validator = () => {
         if (step1Ref.current) {
-            // @ts-ignore
+            // @ts-expect-error trigger submit is not in ref
             const result = step1Ref.current.triggerSubmit();
             console.log('result', result);
             return result;
@@ -18,7 +18,7 @@ export default function RegisterOrganization() {
     };
     const step2Validator = () => {
         if (step2Ref.current) {
-            // @ts-ignore
+            // @ts-expect-error trigger submit is not in ref
             const result = step2Ref.current.triggerSubmit();
             console.log('result', result);
             return result;
@@ -27,6 +27,7 @@ export default function RegisterOrganization() {
     const step1Content = () => <RegisterUser onlyUser={false} ref={step1Ref} />;
     const step2Content = () => <InsertLogo ref={step2Ref} />;
     const step3Content = () => <h1>Step 3 Content</h1>;
+
     return (
         <div className="register-organization">
             <ProcessBar
@@ -39,6 +40,7 @@ export default function RegisterOrganization() {
                     {
                         label: 'Step 2',
                         component: step2Content,
+                        functionInNextStep: step2Validator,
                     },
                     {
                         label: 'Step 3',

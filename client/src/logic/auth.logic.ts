@@ -13,7 +13,8 @@ export const handleLogin = async (
         // Simulate API call
         const response = await apiCall(`login ${type}`, null, { username, password }, null);
         console.log(response);
-    } catch (err) {
+        return response;
+    } catch (_err: any) {
         setError('Invalid username or password');
     }
 };
@@ -40,7 +41,8 @@ export const handleRegisterUser = async (
         // Simulate API call
         const response = await apiCall('register user', null, { name, username, password, phone }, null);
         console.log(response);
-    } catch (err) {
+        return response;
+    } catch (_err: any) {
         setError('Registration failed');
     }
 };
