@@ -80,7 +80,6 @@ export const request = async (
     return fetch(url, options)
         .then((response) => parseResponse(response, requestData.responseType || 'json'))
         .then((data) => {
-            // @ts-ignore
             if (requestData.errorResponseStatus && res.status === requestData.errorResponseStatus) {
                 console.error('Error response:', data);
                 throw new Error(`Error: ${data.status}`);

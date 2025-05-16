@@ -1,6 +1,8 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Header from '../components/header/header';
 import Login from '../components/login/login';
+import RegisterOrganization from '../components/register/registerOrganization.tsx';
+import Register from '../components/register/register.tsx';
 
 const router = createBrowserRouter([
     {
@@ -19,11 +21,21 @@ const router = createBrowserRouter([
             </Header>
         ),
     },
+
     {
-        path: '/register',
+        path: '/register-user',
         element: (
             <Header>
                 <Register />
+            </Header>
+        ),
+    },
+
+    {
+        path: '/register-organization',
+        element: (
+            <Header>
+                <RegisterOrganization />
             </Header>
         ),
     },
@@ -38,11 +50,6 @@ function Pages() {
 }
 
 export default Pages;
-
-function Register() {
-    return <div>Register</div>;
-}
-
 function Home() {
     return <div>Home</div>;
 }

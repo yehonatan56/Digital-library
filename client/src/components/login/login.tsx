@@ -1,5 +1,4 @@
-// import 'react';
-// @ts-ignore
+// @ts-expect-error this is a custom hook that is not typed
 import useMobileDetect from 'use-mobile-detect-hook';
 import LoginForm from './loginForm';
 import './login.css';

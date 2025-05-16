@@ -1,0 +1,55 @@
+import React, { useState } from 'react';
+import './processBar.css';
+
+interface ProcessBarProps {
+    config: {
+        label: string;
+        component: any;
+        functionInNextStep?: () => boolean;
+    }[];
+}
+export default function ProcessBar({ config }: ProcessBarProps) {
+    const [step, setStep] = useState(0);
+    return (
+        <div className="process-bar">
+            <div className="steps">
+                <div className="steps-line">
+                    {config.map((item, index) => (
+                        <React.Fragment key={index}>
+                            <div className={`step ${index <= step ? 'active' : ''} step-circle-container`}>
+                                <div className={`circle ${index <= step ? 'active' : ''}`}>{index + 1}</div>
+                                <h2 className="label">{item.label}</h2>
+                            </div>
+                            {index < config.length - 1 && <div className="line" />}
+                        </React.Fragment>
+                    ))}
+                </div>
+                {config.map(
+                    (item, index) =>
+                        index === step && (
+                            <div key={index} className={`step ${index === step ? 'active' : ''}`}>
+                                {index === step && <item.component />}
+                            </div>
+                        )
+                )}
+
+                <div className="buttons">
+                    <button onClick={() => setStep((prev) => (prev > 0 ? prev - 1 : prev))} disabled={step === 0}>
+                        Previous
+                    </button>
+                    <button
+                        onClick={() => {
+                            if (config[step].functionInNextStep) {
+                                // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                                config[step].functionInNextStep() &&
+                                    setStep((prev) => (prev < config.length - 1 ? prev + 1 : prev));
+                            }
+                        }}
+                    >
+                        {step === config.length - 1 ? 'Finish' : 'Next'}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
