@@ -21,22 +21,10 @@ export const handleLogin = async (
 
 export const handleRegisterUser = async (
     e: any,
-    {
-        name,
-        username,
-        password,
-        confirmPassword,
-        phone,
-    }: { name: string; username: string; password: string; confirmPassword: string; phone: string },
+    { name, username, password, phone }: { name: string; username: string; password: string; phone: string },
     setError: any
 ) => {
     e.preventDefault();
-
-    if (password !== confirmPassword) {
-        setError('Passwords do not match');
-        return;
-    }
-
     try {
         // Simulate API call
         const response = await apiCall('register user', null, { name, username, password, phone }, null);

@@ -28,7 +28,6 @@ export default function ProcessBar({ config }: ProcessBarProps) {
                     (item, index) =>
                         index === step && (
                             <div key={index} className={`step ${index === step ? 'active' : ''}`}>
-                                <h2 className="label">{item.label}</h2>
                                 {index === step && <item.component />}
                             </div>
                         )
@@ -41,13 +40,13 @@ export default function ProcessBar({ config }: ProcessBarProps) {
                     <button
                         onClick={() => {
                             if (config[step].functionInNextStep) {
+                                // eslint-disable-next-line @typescript-eslint/no-unused-expressions
                                 config[step].functionInNextStep() &&
                                     setStep((prev) => (prev < config.length - 1 ? prev + 1 : prev));
                             }
                         }}
-                        disabled={step === config.length - 1}
                     >
-                        Next
+                        {step === config.length - 1 ? 'Finish' : 'Next'}
                     </button>
                 </div>
             </div>

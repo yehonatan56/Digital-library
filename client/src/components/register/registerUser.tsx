@@ -45,9 +45,8 @@ const RegisterUser = forwardRef(function RegisterUser(
             setError('Passwords do not match');
             return false;
         }
-        // Call the handleRegisterUser function with the form data
-        // and setError to handle any errors
-        return onlyUser ? handleRegisterUser(e, { name, username, password, confirmPassword, phone }, setError) : true;
+        const userData = { name, username, password, phone };
+        return onlyUser ? handleRegisterUser(e, userData, setError) : userData;
     };
 
     return (
